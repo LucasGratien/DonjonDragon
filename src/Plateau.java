@@ -1,15 +1,61 @@
-public class Plateau {
-    private int[] plateau; // Tableau linéaire de 64 cases représentant le plateau de jeu
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
-    // Constructeur qui initialise le tableau de 64 cases
-    public Plateau() {
-        plateau = new int[64]; // Le tableau contient 64 éléments, indexés de 0 à 63
+public class Plateau {
+    private Personnage personnage;
+    private List<Bonus> bonusList;
+    private Random random;
+
+    public Plateau(Personnage personnage) {
+        this.personnage = personnage;
+        this.bonusList = new ArrayList<>();
+        this.random = new Random();
+        initialiserBonus();
+        randomiseBonus();
     }
 
-    public void affichePlateau() {
-        for (int i = 0; i < 64; i++) { // Boucle sur chaque case du tableau
-            System.out.print(plateau[i] + " "); // Affiche chaque case séparée par un espace
+    private void initialiserBonus() {
+        bonusList.add(Bonus.creerBonus("Arme", "Massue"));
+        bonusList.add(Bonus.creerBonus("Arme", "Épée"));
+        bonusList.add(Bonus.creerBonus("Sort", "Eclair"));
+        bonusList.add(Bonus.creerBonus("Sort", "Boule de feu"));
+        bonusList.add(Bonus.creerBonus("Potion", "Grande potion"));
+        bonusList.add(Bonus.creerBonus("Potion", "Petite potion"));
+    }
+
+    private void randomiseBonus() {
+        Collections.shuffle(bonusList, random);
+    }
+
+
+    public Bonus getBonusAtPosition(int position) {
+        if (position < 0 || position >= bonusList.size()) {
+            return null;
         }
-        System.out.println(); // Saut de ligne à la fin de l'affichage du plateau
+        return bonusList.get(position);
+    }
+
+    public void AppliqBonus(Bonus bonus) {
+        int xpGagne = random.nextInt(5) + 5;
+        personnage.gagnerXP(xpGagne);
+
+        switch (bonus.getType()) {
+            case "Arme":
+                System.out.println("Vous avez équipé " + bonus.getName());
+                break;
+            case "Sort":
+                System.out.println("Vous avez appris le sort " + bonus.getName());
+                break;
+            case "Potion":
+                System.out.println("Vous avez consommé la potion " + bonus.getName());
+                break;
+            default:
+                System.out.println("Bonus inconnu !");
+        }
+
+        System.out.println("Vous avez gagné " + xpGagne + " points d'XP !");
+
     }
 }

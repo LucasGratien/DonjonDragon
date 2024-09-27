@@ -1,4 +1,4 @@
-abstract class EquipementOffensif {
+public abstract class EquipementOffensif {
     // Déclaration des attributs privés
     private String name;
     private int level;

@@ -3,33 +3,49 @@ public class Bonus {
     private String type;
     private int effets;
 
-
     public Bonus(String name, String type, int effets) {
         this.name = name;
         this.type = type;
         this.effets = effets;
     }
 
-
-    public static Bonus creerBonus(String type) {
+    public static Bonus creerBonus(String type, String nom) {
         switch (type) {
             case "Arme":
-                case "Sort":
-                case "Potion":
-                default:
+                return creerArme(nom);
+            case "Sort":
+                return creerSort(nom);
+            case "Potion":
+                return creerPotion(nom);
+            default:
                 return null;
         }
     }
+
     public static Bonus creerArme(String nom) {
         switch (nom) {
             case "Épée":
                 return new Bonus("Épée", "Arme", 5);
             case "Massue":
                 return new Bonus("Massue", "Arme", 3);
+            default:
+                return null;
+        }
+    }
+
+    public static Bonus creerSort(String nom) {
+        switch (nom) {
             case "Eclair":
                 return new Bonus("Eclair", "Sort", 2);
             case "Boule de feu":
                 return new Bonus("Boule de feu", "Sort", 7);
+            default:
+                return null;
+        }
+    }
+
+    public static Bonus creerPotion(String nom) {
+        switch (nom) {
             case "Petite potion":
                 return new Bonus("Petite potion", "Potion", 2);
             case "Grande potion":
@@ -38,6 +54,7 @@ public class Bonus {
                 return null;
         }
     }
+
     public int getEffets() {
         return effets;
     }
@@ -50,7 +67,6 @@ public class Bonus {
         return name;
     }
 
-    // Setters
     public void setName(String name) {
         this.name = name;
     }
