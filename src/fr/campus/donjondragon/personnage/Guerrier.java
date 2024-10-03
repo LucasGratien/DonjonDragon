@@ -1,3 +1,5 @@
+package fr.campus.donjondragon.personnage;
+
 public class Guerrier extends Personnage {
 
     public Guerrier(String nom, String typePersonnage) {
@@ -5,7 +7,7 @@ public class Guerrier extends Personnage {
     }
 
     public String toString() {
-        return "Guerrier{" +
+        return "fr.campus.donjondragon.personnage.Guerrier{" +
                 "name='" + getNom() + '\'' +
                 ", type='" + getTypePersonnage() + '\'' +
                 '}';

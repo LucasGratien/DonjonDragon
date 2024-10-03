@@ -1,10 +1,12 @@
+package fr.campus.donjondragon;
+
 public class Bonus {
     private String name;
     private String type;
     private int effets;
 
-    public Bonus(String name, String type, int effets) {
-        this.name = name;
+    public Bonus(String nom, String type, int effets) {
+        this.name = nom;
         this.type = type;
         this.effets = effets;
     }
@@ -81,7 +83,7 @@ public class Bonus {
 
     @Override
     public String toString() {
-        return "Bonus{" +
+        return "fr.campus.donjondragon.Bonus{" +
                 "name='" + name + '\'' +
                 ", type='" + type + '\'' +
                 ", effets=" + effets +

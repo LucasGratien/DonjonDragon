@@ -1,19 +1,21 @@
+package fr.campus.donjondragon.equipements;
+
 public abstract class EquipementOffensif {
     // Déclaration des attributs privés
-    private String name;
+    private String nom;
     private int level;
     private String type;
 
     // Constructeur qui initialise les trois attributs
-    public EquipementOffensif(String type, String name, int level) {
-        this.name = name;
+    public EquipementOffensif(String type, String nom, int level) {
+        this.nom = nom;
         this.level = level;
         this.type = type;
     }
 
     // Getters pour accéder aux attributs privés
-    public String getName() {
-        return name;
+    public String getNom() {
+        return nom;
     }
 
     public int getLevel() {
@@ -25,8 +27,8 @@ public abstract class EquipementOffensif {
     }
 
     // Setters pour modifier les attributs privés
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String nom) {
+        this.nom = nom;
     }
 
     public void setLevel(int level) {

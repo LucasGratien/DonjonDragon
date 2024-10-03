@@ -1,4 +1,6 @@
-public class Bouclier extends EquipementDefensif{
+package fr.campus.donjondragon.equipements;
+
+public class Bouclier extends EquipementDefensif {
 
     public Bouclier(String name, int resistance, String type ) {
     super(name, resistance, type);
@@ -6,8 +8,8 @@ public class Bouclier extends EquipementDefensif{
 
 @Override
 public String toString() {
-    return "Bouclier{" +
-            "name='" + getName() + '\'' +
+    return "fr.campus.donjondragon.equipements.Bouclier{" +
+            "name='" + getNom() + '\'' +
             ", level=" + getResistance() +
             ", type='" + getType() + '\'' +
             '}';
