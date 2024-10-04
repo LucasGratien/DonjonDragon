@@ -16,7 +16,6 @@ public class Plateau {
     private List<Bonus> bonusList;
     private Random random;
 
-    // Constructeur modifié pour accepter le personnage
     public Plateau(Personnage personnage) {
         this.personnage = personnage;
         cases = new ArrayList<>(64);
@@ -58,7 +57,7 @@ public class Plateau {
 
     private void randomiserEnnemisSurPlateau() {
         for (int i = 0; i < 5; i++) {
-            String nomEnnemi = "Ennemi " + (i + 1);
+            String nomEnnemi = "Aragon " + (i + 1);
             String typeEnnemi = "Type" + (i + 1);
             int degatsEnnemi = random.nextInt(10) + 1;
             Ennemi ennemi = new Ennemi(nomEnnemi, typeEnnemi, degatsEnnemi);
@@ -98,7 +97,7 @@ public class Plateau {
 
         Bonus bonus = getBonusAtPosition(index);
         if (bonus != null) {
-            int xpGagne = random.nextInt(5) + 5; // Gain d'XP aléatoire entre 5 et 9
+            int xpGagne = random.nextInt(5) + 5;
             personnage.gagnerXP(xpGagne);
 
             switch (bonus.getType()) {
@@ -122,7 +121,7 @@ public class Plateau {
         }
     }
 
-    public void deplacerPersonnage(int index) {
+    public void deplacerPersonnage(int index, Personnage joueur) {
         if (index < 0 || index >= cases.size()) {
             System.out.println("Position invalide !");
             return;
@@ -130,21 +129,69 @@ public class Plateau {
 
         Ennemi ennemi = getEnnemiAtPosition(index);
         if (ennemi != null) {
-            lancerCombat(ennemi);
+            choixJoueur(joueur, ennemi);
         } else {
             System.out.println("Pas d'ennemi ici, continuez votre aventure !");
         }
     }
 
-    private void choixJoueur(Personnage joueur, Ennemi ennemi) {
+    public void choixJoueur(Personnage joueur, Ennemi ennemi) {
         Scanner scanner = new Scanner(System.in);
         while (joueur.getpDv() > 0 && ennemi.getpDv() > 0) {
-            System.out.println("Choisissez une action : 1 - Attaquer, 2 - Fuir !");
+            System.out.println(Ascii.ART1);
+            System.out.println("Choisissez une action : 1 - Attaquer, 2 - Fuir comme un lache !");
+
+            if (scanner.hasNextInt()) {
+                int choix = scanner.nextInt();
+                scanner.nextLine();
+                if (choix == 1) {
+                    combat(joueur, ennemi);
+                } else if (choix == 2) {
+                    int casesRecule = random.nextInt(6) + 1;
+                    System.out.println("Vous fuyez comme un lâche et reculez de " + casesRecule + " cases !");
+                    int nouvellePosition = Math.max(0, joueur.getPosition(personnage) - casesRecule);
+                    joueur.setPosition(nouvellePosition);
+                    break;
+                } else {
+                    System.out.println("Choix invalide ! Veuillez saisir 1 ou 2.");
+                }
+            } else {
+
+                System.out.println("Entrée invalide ! Veuillez saisir un nombre.");
+                scanner.nextLine();
+            }
+        }
+    }
+
+
+    private void combat(Personnage joueur, Ennemi ennemi) {
+        Scanner scanner = new Scanner(System.in);
+        while (joueur.getpDv() > 0 && ennemi.getpDv() > 0) {
+            System.out.println("Niveau de vie du joueur : " + joueur.getpDv());
+            System.out.println("Niveau de vie de l'ennemi : " + ennemi.getpDv());
+
+            System.out.println("Choisissez une action : 1 - Attaquer, 2 - Fuir comme un lache !");
             int choix = scanner.nextInt();
+            scanner.nextLine();
 
             if (choix == 1) {
-                combat(joueur, ennemi);
+                ennemi.setpDv(ennemi.getpDv() - joueur.getAttaque());
+                System.out.println("Vous avez attaqué l'ennemi ! Niveau de vie de l'ennemi : " + ennemi.getpDv());
+
+                if (ennemi.getpDv() <= 0) {
+                    System.out.println("L'ennemi est vaincu !");
+                    retirerEnnemiDuPlateau(ennemi);
+                    break;
+                }
+                joueur.setpDv(joueur.getpDv() - ennemi.getDegats());
+                System.out.println("L'ennemi vous a frappé ! Niveau de vie du joueur : " + joueur.getpDv());
+
+                if (joueur.getpDv() <= 0) {
+                    System.out.println("Vous avez été vaincu !");
+                    break;
+                }
             } else if (choix == 2) {
+
                 int casesRecule = random.nextInt(6) + 1;
                 System.out.println("Vous fuyez et reculez de " + casesRecule + " cases !");
                 int nouvellePosition = Math.max(0, joueur.getPosition(personnage) - casesRecule);
@@ -154,32 +201,6 @@ public class Plateau {
                 System.out.println("Choix invalide !");
             }
         }
-    }
-
-    private void combat(Personnage joueur, Ennemi ennemi) {
-        while (joueur.getpDv() > 0 && ennemi.getpDv() > 0) {
-            ennemi.setpDv(ennemi.getpDv() - joueur.getAttaque());
-            System.out.println("Vous avez attaqué l'ennemi ! Niveau de vie de l'ennemi : " + ennemi.getpDv());
-
-            if (ennemi.getpDv() <= 0) {
-                System.out.println("L'ennemi est vaincu !");
-                retirerEnnemiDuPlateau(ennemi);
-                break;
-            }
-
-            joueur.setpDv(joueur.getpDv() - ennemi.getDegats());
-            System.out.println("L'ennemi vous a frappé ! Niveau de vie du joueur : " + joueur.getpDv());
-
-            if (joueur.getpDv() <= 0) {
-                System.out.println("Vous avez été vaincu !");
-                break;
-            }
-        }
-    }
-
-    private void lancerCombat(Ennemi ennemi) {
-        System.out.println("Combat engagé contre " + ennemi.getNom() + " !");
-        choixJoueur(personnage, ennemi);
     }
 
     private void retirerEnnemiDuPlateau(Ennemi ennemi) {

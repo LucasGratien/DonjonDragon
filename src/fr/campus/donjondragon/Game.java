@@ -1,5 +1,4 @@
 package fr.campus.donjondragon;
-
 import fr.campus.donjondragon.personnage.Guerrier;
 import fr.campus.donjondragon.personnage.Magicien;
 import fr.campus.donjondragon.personnage.Personnage;
@@ -113,10 +112,12 @@ public class Game {
             System.out.println("Nom de votre guerrier :");
             String nom = scanner.nextLine();
             personnage = new Guerrier(nom, "Guerrier");
+            System.out.println(Ascii.ART2);
         } else if (choix == 2) {
             System.out.println("Nom de votre magicien :");
             String nom = scanner.nextLine();
             personnage = new Magicien(nom, "Magicien");
+            System.out.println(Ascii.ART3);
         } else if (choix == 3) {
             personnage = choisirPersonnageExistant();
             if (personnage != null) {
@@ -164,34 +165,38 @@ public class Game {
         try {
             int resultat = lancer();
             System.out.println("Vous avez obtenu : " + resultat);
+
             position += resultat;
 
             if (position > 64) {
                 position = 64;
             }
             System.out.println("XP actuel : " + personnage.getXpPerso());
-
-            plateau.deplacerPersonnage(position - 1);
+            plateau.deplacerPersonnage(position - 1, personnage);
 
             int index = position - 1;
 
             Bonus bonus = plateau.getBonusAtPosition(index);
             if (bonus != null) {
                 System.out.println("Vous avez trouvé un bonus : " + bonus.getName());
-                plateau.appliquerBonus(index); // Appliquer le bonus à la bonne position
+                plateau.appliquerBonus(index);
             }
 
             if (position == 64) {
                 System.out.println("Vous avez atteint la case finale " + position + " sur 64 !");
+                System.out.println(Ascii.ART5);
+
             } else {
                 System.out.println("Vous êtes maintenant à la case " + position + " sur 64.");
             }
         } catch (Exception e) {
+
             position = 64;
             System.out.println(e.getMessage());
             System.out.println("Votre position est à la case " + position + ".");
         }
     }
+
 
 
     public int lancer() {
